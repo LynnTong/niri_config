@@ -2,5 +2,6 @@
 spawn-at-startup "/usr/lib/pam_kwallet_init > /dev/null 2>&1 &"
 
 // To slove the problem that Dolphin cannot find applications (when running under another window manager)
+// Make sure the pkg "archlinux-xdg-menu" is installed
 spawn-sh-at-startup "XDG_MENU_PREFIX=arch- kbuildsycoca6 --noincremental"
 

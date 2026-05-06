@@ -34,7 +34,7 @@ else
     echo "错误：源文件不存在 $HOOK_SRC"
 fi
 
-USER_SRC="$SCRIPT_DIR/user/user.kdl"
+USER_SRC="$SCRIPT_DIR/niri/user/user.kdl"
 USER_DEST_DIR="$HOME/.config/niri/user"
 
 if [ -f "$USER_SRC" ]; then
