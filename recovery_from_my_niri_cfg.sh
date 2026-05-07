@@ -102,3 +102,63 @@ if [ -f "$ZIP_SRC" ]; then
 else
     echo "警告：压缩包不存在 $ZIP_SRC"
 fi
+
+# -------------------------------
+# 6. 写入输入法环境变量到 ~/.config/environment.d/99-local.conf
+ENV_DIR="$HOME/.config/environment.d"
+ENV_FILE="$ENV_DIR/99-local.conf"
+
+mkdir -p "$ENV_DIR"
+
+cat > "$ENV_FILE" <<'EOF'
+GTK_IM_MODULE=fcitx
+QT_IM_MODULE=fcitx
+SDL_IM_MODULE=fcitx
+XMODIFIERS=@im=fcitx
+GLFW_IM_MODULE=ibus
+QT_IM_MODULES=wayland;fcitx
+EOF
+
+echo "已写入输入法环境变量到 $ENV_FILE"
+# -------------------------------
+# 7. 写入 GTK3 输入法配置到 ~/.config/gtk-3.0/settings.ini
+GTK3_DIR="$HOME/.config/gtk-3.0"
+GTK3_SETTINGS="$GTK3_DIR/settings.ini"
+
+mkdir -p "$GTK3_DIR"
+touch "$GTK3_SETTINGS"
+
+if [ ! -s "$GTK3_SETTINGS" ]; then
+    cat > "$GTK3_SETTINGS" <<'EOF'
+[Settings]
+gtk-im-module = fcitx
+EOF
+    echo "已创建 GTK3 settings.ini 并写入 gtk-im-module"
+else
+    if grep -qE '^[[:space:]]*gtk-im-module[[:space:]]*=' "$GTK3_SETTINGS"; then
+        sed -i 's|^[[:space:]]*gtk-im-module[[:space:]]*=.*|gtk-im-module = fcitx|' "$GTK3_SETTINGS"
+        echo "已更新 GTK3 gtk-im-module = fcitx"
+    else
+        tmp_file="$(mktemp)"
+
+        awk '
+        BEGIN { inserted = 0 }
+        /^\[Settings\][[:space:]]*$/ && inserted == 0 {
+            print
+            print "gtk-im-module=fcitx"
+            inserted = 1
+            next
+        }
+        { print }
+        END {
+            if (inserted == 0) {
+                print ""
+                print "[Settings]"
+                print "gtk-im-module=fcitx"
+            }
+        }
+        ' "$GTK3_SETTINGS" > "$tmp_file" && mv "$tmp_file" "$GTK3_SETTINGS"
+
+        echo "已在 [Settings] 下添加 gtk-im-module = fcitx"
+    fi
+fi
