@@ -22,6 +22,6 @@ window-rule {
 
 // Make wps works better.
 window-rule {
-    match app-id="WPS Writer" title="wps"
+    match app-id=r#"(?i)wps"# title="wps"
     open-floating true
 }
