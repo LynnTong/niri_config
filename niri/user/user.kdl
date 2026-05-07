@@ -5,15 +5,6 @@ spawn-at-startup "kwalletd6"
 // Make sure the pkg "archlinux-xdg-menu" is installed
 spawn-sh-at-startup "XDG_MENU_PREFIX=arch- kbuildsycoca6 --noincremental"
 
-// Use fcitx as chinese input method.
-environment {
-  GTK_IM_MODULE "fcitx"
-  QT_IM_MODULE "fcitx"
-  SDL_IM_MODULE "fcitx"
-  XMODIFIERS "@im=fcitx"
-  QT_IM_MODULES "wayland;fcitx"
-}
-
 // Make svn diff show more good-looking.
 window-rule {
     match app-id="kdesvn" title="Diff Display"
