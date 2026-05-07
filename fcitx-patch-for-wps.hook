@@ -8,4 +8,4 @@ Target = wps-office-mime-cn
 [Action]
 Description = Fix fcitx not working in WPS
 When = PostTransaction
-Exec = /usr/bin/bash -c "/usr/bin/sed -i -E -e 's/Exec ?= ?/Exec=env XMODIFIERS="@im=fcitx" GTK_IM_MODULE="fcitx" QT_IM_MODULE="fcitx" SDL_IM_MODULE=fcitx /g' /usr/share/applications/wps-office*.desktop"
+Exec = /usr/bin/bash -c "/usr/bin/sed -i -E -e 's/Exec ?= ?/Exec=env LANG=zh_CN.UTF-8 WPS_LANG=zh_CN XMODIFIERS="@im=fcitx" GTK_IM_MODULE="fcitx" QT_IM_MODULE="fcitx" SDL_IM_MODULE=fcitx /g' /usr/share/applications/wps-office*.desktop"
