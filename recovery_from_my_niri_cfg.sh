@@ -34,6 +34,18 @@ else
     echo "错误：源文件不存在 $HOOK_SRC"
 fi
 
+HOOK_SRC="$SCRIPT_DIR/fcitx-patch-for-wps.hook"
+HOOK_DEST="/etc/pacman.d/hooks"
+
+if [ -f "$HOOK_SRC" ]; then
+    echo "将 hook 文件复制到 $HOOK_DEST，需要 sudo"
+    sudo mkdir -p "$HOOK_DEST"
+    sudo cp "$HOOK_SRC" "$HOOK_DEST/fcitx-patch-for-wps.hook"
+    echo "hook 复制完成"
+else
+    echo "错误：源文件不存在 $HOOK_SRC"
+fi
+
 USER_SRC="$SCRIPT_DIR/niri/user/user.kdl"
 USER_DEST_DIR="$HOME/.config/niri/user"
 

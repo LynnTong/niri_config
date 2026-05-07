@@ -1,0 +1,11 @@
+[Trigger]
+Operation = Upgrade
+Operation = Install
+Type = Package
+Target = wps-office-cn
+Target = wps-office-mime-cn
+
+[Action]
+Description = Fix fcitx not working in WPS
+When = PostTransaction
+Exec = /usr/bin/bash -c "/usr/bin/sed -i -E -e 's/Exec ?= ?/Exec=env XMODIFIERS="@im=fcitx" GTK_IM_MODULE="fcitx" QT_IM_MODULE="fcitx" SDL_IM_MODULE=fcitx /g' /usr/share/applications/wps-office*.desktop"
