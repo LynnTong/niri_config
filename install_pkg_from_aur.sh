@@ -3,7 +3,6 @@ set -e
 
 AUR_PACKAGES=(
     netease-cloud-music-web-player
-    notepad-plus-plus-linux-bin
     ttf-ms-fonts
     ttf-wps-fonts
     visual-studio-code-bin
