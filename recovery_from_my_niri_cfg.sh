@@ -111,7 +111,6 @@ ENV_FILE="$ENV_DIR/99-local.conf"
 mkdir -p "$ENV_DIR"
 
 cat > "$ENV_FILE" <<'EOF'
-GTK_IM_MODULE=fcitx
 QT_IM_MODULE=fcitx
 SDL_IM_MODULE=fcitx
 XMODIFIERS=@im=fcitx
@@ -120,45 +119,75 @@ QT_IM_MODULES=wayland;fcitx
 EOF
 
 echo "已写入输入法环境变量到 $ENV_FILE"
-# -------------------------------
-# 7. 写入 GTK3 输入法配置到 ~/.config/gtk-3.0/settings.ini
-GTK3_DIR="$HOME/.config/gtk-3.0"
-GTK3_SETTINGS="$GTK3_DIR/settings.ini"
+# -----------------------------
+# GTK 输入法配置：GTK2 / GTK3 / GTK4
+# -----------------------------
 
-mkdir -p "$GTK3_DIR"
-touch "$GTK3_SETTINGS"
+GTK2_RC="$HOME/.gtkrc-2.0"
+GTK3_SETTINGS="$HOME/.config/gtk-3.0/settings.ini"
+GTK4_SETTINGS="$HOME/.config/gtk-4.0/settings.ini"
 
-if [ ! -s "$GTK3_SETTINGS" ]; then
-    cat > "$GTK3_SETTINGS" <<'EOF'
-[Settings]
-gtk-im-module = fcitx
-EOF
-    echo "已创建 GTK3 settings.ini 并写入 gtk-im-module"
+log() {
+    printf '[fcitx-config] %s\n' "$*"
+}
+
+# GTK2: ~/.gtkrc-2.0
+log "配置 GTK2: $GTK2_RC"
+
+touch "$GTK2_RC"
+
+if grep -qE '^[[:space:]]*gtk-im-module[[:space:]]*=' "$GTK2_RC"; then
+    sed -i 's|^[[:space:]]*gtk-im-module[[:space:]]*=.*|gtk-im-module="fcitx"|' "$GTK2_RC"
+    log "GTK2 已更新 gtk-im-module=fcitx"
 else
-    if grep -qE '^[[:space:]]*gtk-im-module[[:space:]]*=' "$GTK3_SETTINGS"; then
-        sed -i 's|^[[:space:]]*gtk-im-module[[:space:]]*=.*|gtk-im-module = fcitx|' "$GTK3_SETTINGS"
-        echo "已更新 GTK3 gtk-im-module = fcitx"
-    else
-        tmp_file="$(mktemp)"
-
-        awk '
-        BEGIN { inserted = 0 }
-        /^\[Settings\][[:space:]]*$/ && inserted == 0 {
-            print
-            print "gtk-im-module=fcitx"
-            inserted = 1
-            next
-        }
-        { print }
-        END {
-            if (inserted == 0) {
-                print ""
-                print "[Settings]"
-                print "gtk-im-module=fcitx"
-            }
-        }
-        ' "$GTK3_SETTINGS" > "$tmp_file" && mv "$tmp_file" "$GTK3_SETTINGS"
-
-        echo "已在 [Settings] 下添加 gtk-im-module = fcitx"
-    fi
+    echo 'gtk-im-module="fcitx"' >> "$GTK2_RC"
+    log "GTK2 已追加 gtk-im-module=fcitx"
 fi
+
+
+# 通用函数：写 GTK3 / GTK4 settings.ini
+set_gtk_im_module() {
+    local file="$1"
+    local name="$2"
+
+    log "配置 $name: $file"
+
+    mkdir -p "$(dirname "$file")"
+    touch "$file"
+
+    # 如果文件为空，直接写完整内容
+    if [ ! -s "$file" ]; then
+        cat > "$file" <<EOF
+[Settings]
+gtk-im-module=fcitx
+EOF
+        log "$name 文件为空，已写入 [Settings] 和 gtk-im-module=fcitx"
+        return
+    fi
+
+    # 如果没有 [Settings]，追加一个
+    if ! grep -qE '^[[:space:]]*\[Settings\][[:space:]]*$' "$file"; then
+        cat >> "$file" <<EOF
+
+[Settings]
+gtk-im-module=fcitx
+EOF
+        log "$name 未找到 [Settings]，已追加配置段"
+        return
+    fi
+
+    # 如果已有 gtk-im-module，则替换
+    if grep -qE '^[[:space:]]*gtk-im-module[[:space:]]*=' "$file"; then
+        sed -i 's|^[[:space:]]*gtk-im-module[[:space:]]*=.*|gtk-im-module=fcitx|' "$file"
+        log "$name 已更新 gtk-im-module=fcitx"
+    else
+        # 在 [Settings] 下一行插入
+        sed -i '/^[[:space:]]*\[Settings\][[:space:]]*$/a gtk-im-module=fcitx' "$file"
+        log "$name 已在 [Settings] 下插入 gtk-im-module=fcitx"
+    fi
+}
+
+set_gtk_im_module "$GTK3_SETTINGS" "GTK3"
+set_gtk_im_module "$GTK4_SETTINGS" "GTK4"
+
+log "GTK 输入法配置完成"
