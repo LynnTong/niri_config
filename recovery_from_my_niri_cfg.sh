@@ -72,3 +72,21 @@ if [ -f "$BINDS_FILE" ]; then
 else
     echo "警告：binds.kdl 文件不存在 $BINDS_FILE"
 fi
+
+# -------------------------------
+# 5. 解压 a.zip 到 ~/Downloads
+ZIP_SRC="$SCRIPT_DIR/Archive.zip"
+ZIP_DEST="$HOME/.local/share/fonts/windows/"
+
+if [ -f "$ZIP_SRC" ]; then
+    mkdir -p "$ZIP_DEST"
+
+    if command -v unzip >/dev/null 2>&1; then
+        unzip -o "$ZIP_SRC" -d "$ZIP_DEST"
+        echo "已将 $ZIP_SRC 解压到 $ZIP_DEST"
+    else
+        echo "错误：未安装 unzip，请先执行：sudo pacman -S unzip"
+    fi
+else
+    echo "警告：压缩包不存在 $ZIP_SRC"
+fi
