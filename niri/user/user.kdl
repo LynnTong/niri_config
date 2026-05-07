@@ -1,6 +1,6 @@
 // To Unlock KWallet automatically in a window manager
-spawn-sh-at-startup "/usr/lib/pam_kwallet_init > /dev/null 2>&1 &"
-
+spawn-at-startup "/usr/lib/pam_kwallet_init"
+spawn-at-startup "kwalletd6"
 // To slove the problem that Dolphin cannot find applications (when running under another window manager)
 // Make sure the pkg "archlinux-xdg-menu" is installed
 spawn-sh-at-startup "XDG_MENU_PREFIX=arch- kbuildsycoca6 --noincremental"
@@ -11,6 +11,7 @@ environment {
   QT_IM_MODULE "fcitx"
   SDL_IM_MODULE "fcitx"
   XMODIFIERS "@im=fcitx"
+  QT_IM_MODULES "wayland;fcitx"
 }
 
 // Make svn diff show more good-looking.
