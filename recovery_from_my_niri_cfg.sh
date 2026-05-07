@@ -44,3 +44,31 @@ if [ -f "$USER_SRC" ]; then
 else
     echo "警告：源 user.kdl 文件不存在 $USER_SRC"
 fi
+
+# -------------------------------
+# 4. 在 binds.kdl 追加快捷键（如果不存在）
+BINDS_FILE="$HOME/.config/niri/dms/binds.kdl"
+BINDS_LINE1='    Super+B cooldown-ms=200 { spawn "firefox"; }'
+BINDS_LINE2='    Super+E cooldown-ms=100 { spawn "sh" "-c" "dolphin > /dev/null 2>&1 &"; }'
+
+if [ -f "$BINDS_FILE" ]; then
+    # 检查两行是否已经存在
+    if grep -Fq "$BINDS_LINE1" "$BINDS_FILE" && grep -Fq "$BINDS_LINE2" "$BINDS_FILE"; then
+        echo "快捷键已经存在，跳过追加"
+    else
+        # 在最后一个大括号前插入
+        tmp_file="$(mktemp)"
+        awk -v line1="$BINDS_LINE1" -v line2="$BINDS_LINE2" '
+        {
+            if ($0 ~ /^}$/ && !inserted) {
+                print line1
+                print line2
+                inserted=1
+            }
+            print
+        }' "$BINDS_FILE" > "$tmp_file" && mv "$tmp_file" "$BINDS_FILE"
+        echo "已在 binds.kdl 追加快捷键"
+    fi
+else
+    echo "警告：binds.kdl 文件不存在 $BINDS_FILE"
+fi
