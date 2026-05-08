@@ -28,6 +28,8 @@ AUR_PACKAGES=(
     kdesvn
     #挂载smb网盘
     smb4k
+    #pdf阅读器
+    okular
     # 下面这个包是为了在dolphin创建右键打开快捷方式准备的
     archlinux-xdg-menu
 )

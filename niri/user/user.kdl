@@ -7,6 +7,11 @@ spawn-at-startup "smb4k"
 // Make sure the pkg "archlinux-xdg-menu" is installed
 spawn-sh-at-startup "XDG_MENU_PREFIX=arch- kbuildsycoca6 --noincremental"
 
+// allow launcher shows above fullscreen layer.
+environment {
+    DMS_MODAL_LAYER "overlay"
+}
+
 // Make svn diff show more good-looking.
 window-rule {
     match app-id="kdesvn" title="Diff Display"
