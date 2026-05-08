@@ -105,6 +105,7 @@ fi
 
 # -------------------------------
 # 6. 写入输入法环境变量到 ~/.config/environment.d/99-local.conf
+# 也写入了DMS的环境变量
 ENV_DIR="$HOME/.config/environment.d"
 ENV_FILE="$ENV_DIR/99-local.conf"
 
@@ -116,6 +117,7 @@ SDL_IM_MODULE=fcitx
 XMODIFIERS=@im=fcitx
 GLFW_IM_MODULE=ibus
 QT_IM_MODULES=wayland;fcitx
+DMS_MODAL_LAYER=overlay
 EOF
 
 echo "已写入输入法环境变量到 $ENV_FILE"
