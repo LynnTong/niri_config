@@ -44,3 +44,7 @@ paru -S --needed "${AUR_PACKAGES[@]}"
 
 echo "安装完成"
 echo "可能需要对wps指定QT_FONT_DPI=96/144/192来获得1/1.5/2倍缩放"
+
+echo "设置串口权限"
+sudo usermod -aG uucp,lock $USER
+echo "串口权限设置完成"
