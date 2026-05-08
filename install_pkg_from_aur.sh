@@ -2,14 +2,32 @@
 set -e
 
 AUR_PACKAGES=(
+    #中文输入法
+    #请在kde设置里将virtual keyboard设置为fcitx5
+    fcitx5
+    fcitx5-configtool
+    fcitx5-gtk
+    fcitx5-qt
+    fcitx5-rime
+    #微信
+    wechat-bin
+    #钉钉
+    dingtalk-bin
+    #网易云音乐
     netease-cloud-music-web-player
-    ttf-ms-fonts
-    ttf-wps-fonts
+    #vscode
     visual-studio-code-bin
+    #wps
     wps-office-cn
     wps-office-fonts
     wps-office-mime-cn
     wps-office-mui-zh-cn
+    ttf-ms-fonts
+    ttf-wps-fonts
+    #svn
+    kdesvn
+    #挂载smb网盘
+    smb4k
     # 下面这个包是为了在dolphin创建右键打开快捷方式准备的
     archlinux-xdg-menu
 )

@@ -191,3 +191,19 @@ set_gtk_im_module "$GTK3_SETTINGS" "GTK3"
 set_gtk_im_module "$GTK4_SETTINGS" "GTK4"
 
 log "GTK 输入法配置完成"
+# -------------------------------
+# 8. 拷贝脚本目录下 wallpapers 里的所有图片到 ~/Pictures/Wallpapers
+WALLPAPER_SRC_DIR="$SCRIPT_DIR/Wallpapers"
+WALLPAPER_DEST_DIR="$HOME/Pictures/Wallpapers"
+
+if [ -d "$WALLPAPER_SRC_DIR" ]; then
+    mkdir -p "$WALLPAPER_DEST_DIR"
+
+    find "$WALLPAPER_SRC_DIR" -maxdepth 1 -type f \
+        \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" -o -iname "*.bmp" -o -iname "*.gif" \) \
+        -exec cp -n {} "$WALLPAPER_DEST_DIR/" \;
+
+    echo "已将 $WALLPAPER_SRC_DIR 下的图片拷贝到 $WALLPAPER_DEST_DIR"
+else
+    echo "警告：壁纸目录不存在 $WALLPAPER_SRC_DIR"
+fi
