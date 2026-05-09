@@ -60,7 +60,7 @@ fi
 # -------------------------------
 # 4. 在 binds.kdl 追加快捷键（如果不存在）
 BINDS_FILE="$HOME/.config/niri/dms/binds.kdl"
-BINDS_LINE1='    Super+B cooldown-ms=200 { spawn "firefox"; }'
+BINDS_LINE1='    Super+B cooldown-ms=200 { spawn "env" "MOZ_ENABLE_WAYLAND=1" "firefox"; }'
 BINDS_LINE2='    Super+E cooldown-ms=100 { spawn "sh" "-c" "dolphin > /dev/null 2>&1 &"; }'
 
 if [ -f "$BINDS_FILE" ]; then
