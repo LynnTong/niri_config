@@ -1,0 +1,14 @@
+[opener]
+edit = [
+  { run = 'nano "$@"', block = true, for = "unix", desc = "Edit with nano" },
+]
+
+image = [
+  { run = 'gwenview "$@"', orphan = true, for = "unix", desc = "Open with Gwenview" },
+]
+
+[open]
+prepend_rules = [
+  # 图片：Gwenview 打开
+  { mime = "image/*", use = "image" },
+]
